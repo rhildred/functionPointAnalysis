@@ -1,0 +1,303 @@
+
+<!-- saved from url=(0087)http://groups.engin.umd.umich.edu/CIS/course.des/cis525/js/f00/artan/functionpoints.htm -->
+<html data-ember-extension="1"><script id="tinyhippos-injected">if (window.top.ripple) { window.top.ripple("bootstrap").inject(window, document); }</script><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta name="keywords" content="software engineering, metrics, function points">
+<meta name="descriptin" content="Function-oriented software metrics use function points as a measure of 
+the functionality delivered by the aplication">
+<title>Calculating function points</title>
+
+<script language="JavaScript">
+function clearStatus() { status = ""; }
+function promptInputs() { status = "Number of User Inputs"; }
+function promptOutputs() { status = "Number of User Outputs"; }
+function promptInquiries() { status = "Number of User Inquiries"; }
+function promptFiles() { status = "Number of Files"; }
+function promptInterfaces() { status = "Number of External Interfaces"; }
+
+// In JavaScript 1.1, parseInt returns NaN (recognizable via isNaN() for non-integers. But JavaScript 1.0
+// returns 0 and doesn't have an isNaN routine. Since comparisons to NaN always fail, the > 0 test
+// works on either version.
+
+function isInt(string) {
+ var val = parseInt(string);
+ return(val > 0);
+} // isInt()
+
+// Three tests:
+// 1) userInputs, userOutputs, userInquiries, numberFiles, and externalInterfaces are an integer.
+// 2) Weighting factor is not missing.
+// 3) Rating for each factor should be in a range from 0 to 5.
+// If any of the tests fails, calculation is canceled.
+
+function checkDataEntry() {
+  var userInputs = document.mainForm.userInputs;
+  if (!isInt(userInputs.value) && userInputs.value!=0) {
+    alert("Number of user inputs must be an integer.\n '" + userInputs.value + "' is not." );
+    return(false);
+  } //if
+  var userOutputs = document.mainForm.userOutputs;
+  if (!isInt(userOutputs.value) && userOutputs.value!=0) {
+    alert("Number of user outputs must be an integer.\n '" + userOutputs.value + "' is not.");
+    return(false);
+  } //if
+  var userInquiries = document.mainForm.userInquiries;
+  if (!isInt(userInquiries.value) && userInquiries.value!=0) {
+    alert("Number of user inquiries must be an integer.\n '" + userInquiries.value + "' is not.");
+    return(false);
+  } //if
+  var numberFiles = document.mainForm.numberFiles;
+  if (!isInt(numberFiles.value) && numberFiles.value!=0) {
+    alert("Number of files must be an integer.\n '" + numberFiles.value + "' is not.");
+    return(false);
+  } //if
+  var externalInterfaces = document.mainForm.externalInterfaces;
+  if (!isInt(externalInterfaces.value) && externalInterfaces.value!=0) {
+    alert("Number of external interfaces must be an integer.\n '" + externalInterfaces.value + "' is not.");
+    return(false);
+  } //if
+// Check if the rating for each factor is in the range from 0 to 5 
+  for (var i=0; i<14; i++)
+  if (mainForm.F1[i].value<"0" || mainForm.F1[i].value>"5") {
+   j=i+1;
+   alert("Rating for F" + j + " must be a number from 0 to 5.\n '" + mainForm.F1[i].value + "' is not.");
+   return(false); 
+  } //if
+} //checkDataEntry 
+
+function calculate() {
+// If data entry looks OK, calculate form. 
+    var countTotal = 0, factorTotal = 0; 
+
+	// calculate countTotal  
+    if (mainForm.userInputsWeight[0].checked) mainForm.T1.value = 3 * mainForm.userInputs.value ;
+    if (mainForm.userInputsWeight[1].checked) mainForm.T1.value = 4 * mainForm.userInputs.value ;    
+    if (mainForm.userInputsWeight[2].checked) mainForm.T1.value = 6 * mainForm.userInputs.value ;
+    countTotal = countTotal + parseInt(mainForm.T1.value);
+    
+    if (mainForm.userOutputsWeight[0].checked) mainForm.T2.value = 4 * mainForm.userOutputs.value ;
+    if (mainForm.userOutputsWeight[1].checked) mainForm.T2.value = 5 * mainForm.userOutputs.value ;    
+    if (mainForm.userOutputsWeight[2].checked) mainForm.T2.value = 7 * mainForm.userOutputs.value ;
+    countTotal = countTotal + parseInt(mainForm.T2.value);
+    
+    if (mainForm.userInquiriesWeight[0].checked) mainForm.T3.value = 3 * mainForm.userInquiries.value ;
+    if (mainForm.userInquiriesWeight[1].checked) mainForm.T3.value = 4 * mainForm.userInquiries.value ;    
+    if (mainForm.userInquiriesWeight[2].checked) mainForm.T3.value = 6 * mainForm.userInquiries.value ;
+    countTotal = countTotal + parseInt(mainForm.T3.value);
+    
+    if (mainForm.numberFilesWeight[0].checked) mainForm.T4.value = 7 * mainForm.numberFiles.value ;
+    if (mainForm.numberFilesWeight[1].checked) mainForm.T4.value = 10 * mainForm.numberFiles.value ;    
+    if (mainForm.numberFilesWeight[2].checked) mainForm.T4.value = 15 * mainForm.numberFiles.value ;
+    countTotal = countTotal + parseInt(mainForm.T4.value);
+
+    if (mainForm.externalInterfacesWeight[0].checked) mainForm.T5.value = 5 * mainForm.externalInterfaces.value ;
+    if (mainForm.externalInterfacesWeight[1].checked) mainForm.T5.value = 7 * mainForm.externalInterfaces.value ;    
+    if (mainForm.externalInterfacesWeight[2].checked) mainForm.T5.value = 10 * mainForm.externalInterfaces.value ;
+    countTotal = countTotal + parseInt(mainForm.T5.value);
+    
+    mainForm.Total.value = countTotal; // Put the sum onto the 'Total' field
+    
+    // calculate the sum of the factor rates 
+    for (var i=0; i<14; i++) factorTotal = factorTotal + parseInt(mainForm.F1[i].value);
+
+	// calculate the final result
+    mainForm.Result.value = parseInt(countTotal * (0.65 + 0.01 * factorTotal)) + " FP";
+} // calculate 
+</script>
+
+<script language="JavaScript1.1">
+
+function generateInfo(mode)
+{
+    if (mode==1) infoWindow1=window.open("userinputs.html","info1Window",
+"toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no");
+    if (mode==2) infoWindow2=window.open("useroutputs.html","info2Window",
+"toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no");
+    if
+(mode==3) infoWindow3=window.open("userinquiries.html","info3Window", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no");
+    if (mode==4) infoWindow3=window.open("numberfiles.html","info4Window",
+"toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no");
+    if
+(mode==5) infoWindow3=window.open("externalinterfaces.html","info5Window", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no");
+} // generateInfo
+
+</script>
+</head>
+
+<body>
+
+<p align="center"><b><font size="5"><u><i>FUNCTION - ORIENTED METRICS</i></u></font></b>
+</p><p><b><i>Function points </i></b> <a href="http://ata.cs.hun.edu.tr/~sencer/reference.html">[Albrecht
+1979]</a>  are basic data from which productivity metrics could be computed.<br>
+FP data is used in two ways:</p>
+<ul>
+  <li>as an estimation variable that is used to "size" each element of
+    the software,
+  </li><li>as baseline metrics collected from past projects and used in conjunction
+    with estimation variables to develop cost and effort projections.</li>
+</ul>
+<p>&nbsp;</p>
+
+<form name="mainForm">
+&nbsp;
+<table border="0" width="87%" cellpadding="2" cellspacing="3" height="204"> 
+  <tbody><tr>
+    <td width="25%" height="21" align="left"></td>
+    <td width="21%" height="21"></td>
+    <td width="51%" align="center" height="21" colspan="3"><font size="4"><b>Weighting
+      Factor</b></font></td>
+    <td width="52%" height="21" align="right"></td>
+  </tr>
+  <tr>
+    <td width="25%" height="21" align="left"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Measurement Parameter</b></td>
+    <td width="21%" height="21"><b>Count</b></td>
+    <td width="11%" align="center" height="21"><b>Simple</b></td>
+    <td width="11%" align="center" height="21"><b>Average</b></td>
+    <td width="11%" align="center" height="21"><b>Complex</b></td>
+    <td width="52%" height="21" align="right"></td>
+  </tr>
+  <tr>
+    <td width="25%" height="27" align="left"><input type="button" value="  Number of User Inputs " onclick="generateInfo(1)"></td>
+    <td width="21%" height="27"><input type="text" name="userInputs" onfocus="promptInputs()" onblur="clearStatus()" size="6" value="0">
+      x  </td>
+    <td width="11%" align="center" height="27"><input type="radio" value="3" name="userInputsWeight">3</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="4" name="userInputsWeight" checked="">
+      4</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="6" name="userInputsWeight">
+      6</td>
+    <td width="52%" height="27" align="right">= <input name="T1" disabled="" size="6" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="25%" height="27" align="left"><input type="button" value="  Number of User Outputs " onclick="generateInfo(2)"></td>
+    <td width="21%" height="27"><input type="text" name="userOutputs" onfocus="promptOutputs()" onblur="clearStatus()" size="6" value="0">
+      x  </td>
+    <td width="11%" align="center" height="27"><input type="radio" value="4" name="userOutputsWeight">4</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="5" name="userOutputsWeight" checked="">
+      5</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="7" name="userOutputsWeight">
+      7</td>
+    <td width="52%" height="27" align="right">= <input name="T2" disabled="" size="6" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="25%" height="27" align="left"><input type="button" value=" Number of User Inquiries " onclick="generateInfo(3)"></td>
+    <td width="21%" height="27"><input type="text" name="userInquiries" onfocus="promptInquiries()" onblur="clearStatus()" size="6" value="0">
+      x  </td>
+    <td width="11%" align="center" height="27"><input type="radio" value="3" name="userInquiriesWeight">3</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="4" name="userInquiriesWeight" checked="">
+      4</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="6" name="userInquiriesWeight">
+      6</td>
+    <td width="52%" height="27" align="right">= <input name="T3" disabled="" size="6" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="25%" height="27" align="left"><input type="button" value="     Number of Files " onclick="generateInfo(4)"></td>
+    <td width="21%" height="27"><input type="text" name="numberFiles" onfocus="promptFiles()" onblur="clearStatus()" size="6" value="0">
+      x  </td>
+    <td width="11%" align="center" height="27"><input type="radio" value="7" name="numberFilesWeight">7</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="10" name="numberFilesWeight" checked="">10</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="15" name="numberFilesWeight">15</td>
+    <td width="52%" height="27" align="right">= <input name="T4" disabled="" size="6" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="25%" height="27" align="left"><input type="button" value="Number of External Interfaces " onclick="generateInfo(5)"></td>
+    <td width="21%" height="27"><input type="text" name="externalInterfaces" onfocus="promptInterfaces()" onblur="clearStatus()" size="6" value="0">
+      x  </td>
+    <td width="11%" align="center" height="27"><input type="radio" value="5" name="externalInterfacesWeight">5</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="7" name="externalInterfacesWeight" checked="">
+      7</td>
+    <td width="11%" align="center" height="27"><input type="radio" value="10" name="externalInterfacesWeight">10</td>
+    <td width="52%" height="27" align="right">= <input name="T5" disabled="" size="6" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="159%" height="27" align="left" colspan="6">&nbsp;<font size="4">
+      Count = Total&nbsp;&nbsp;
+      ---------------------------------------------------------------------------------------&nbsp;&nbsp;&nbsp;
+      </font><input name="Total" disabled="" size="8" value="0">  </td>
+  </tr>
+</tbody></table>
+
+<p><i><u>Note</u></i>. By clicking on the buttons above more information about the
+measurement parameters will be available.</p>
+
+<p>Rate each factor (Fi, i=1 to14) on a scale of 0 to 5:<img border="0" src="images/scale.gif" width="807" height="116"></p>
+&nbsp;
+<table border="0" width="87%"> 
+  <tbody><tr>
+    <td width="89%">F1.&nbsp;&nbsp; Does the system require reliable backup and
+      recovery?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F2.&nbsp;&nbsp; Are data communications required?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F3.&nbsp;&nbsp; Are there distributed processing functions?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F4.&nbsp;&nbsp; Is performance critical?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F5.&nbsp;&nbsp; Will the system run in a existing, heavily utilized
+      operational environment?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F6.&nbsp;&nbsp; Does the system require on-line data entry?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F7.&nbsp;&nbsp; Does the on-line data entry require the input
+      transaction to be built over multiple screens or operations?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F8.&nbsp;&nbsp; Are the master files updated on-line?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F9.&nbsp; Are the inputs, outputs, files or inquiries
+      complex?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F10. Is the internal processing complex?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F11. Is the code designed to be reusable?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F12. Are conversion and installation included in the design?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F13. Is the system designed for multiple installations in
+      different organizations?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+  <tr>
+    <td width="89%">F14. Is the application designed to facilitate change and
+      ease of use by the user?</td>
+    <td width="11%" align="right"><input name="F1" size="1" value="0">  </td>
+  </tr>
+</tbody></table>
+&nbsp;
+<p><input type="button" value="Calculate" name="B1" onclick="checkDataEntry(); calculate()"> 
+     <input type="reset" value="Reset" name="B2"></p>
+<p><i><u><font size="4"><b>Result</b>.</font></u></i>&nbsp; According to the input your project has:&nbsp;
+<input type="text" name="Result" disabled="" size="10" style="font-weight: bold; font-size: 14pt; font-family: Arial; border-style: inset">
+</p>
+</form>
+
+
+
+
+
+</body></html>
